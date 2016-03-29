@@ -1,0 +1,37 @@
+---
+- name: Install prerequisite packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - xorg-x11-server-Xorg
+    - xorg-x11-server-utils
+    - xorg-x11-utils
+    - xorg-x11-xauth
+    - xorg-x11-xinit
+    - java-1.7.0-openjdk
+  tags:
+    - opendj 
+    - prereqpkgs
+
+- name: Create {{ opendj_group }} group
+  group:
+    state: present
+    name: "{{ opendj_group }}"
+  tags:
+    - opendj
+    - unixgroup
+
+- name: Create {{ opendj_user }} user
+  user:
+    state: present
+    name: "{{ opendj_user }}"
+    group: "{{ opendj_group }}"
+    comment: "OpenDJ User"
+    createhome: yes
+    shell: /bin/bash
+    password: "{{ opendj_userpwd|password_hash('sha512') }}"
+    update_password: on_create
+  tags:
+    - opendj
+    - unixuser

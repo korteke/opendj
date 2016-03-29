@@ -1,0 +1,12 @@
+hostname={{ ansible_fqdn }}
+ldapPort={{ ldap_port }}
+generateSelfSignedCertificate={{ gen_cert }}
+enableStartTLS={{ start_tls }}
+ldapsPort={{ ldaps_port }}
+jmxPort={{ jmx_port }}
+adminConnectorPort={{ adm_connport }}
+rootUserDN=cn=Directory Manager
+rootUserPassword={{ dirman_passwd }}
+baseDN={{ base_dn }}
+doNotStart=true
+ldifFile={{ opendj_instdir }}/opendj/initialize.ldif

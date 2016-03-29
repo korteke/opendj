@@ -1,0 +1,31 @@
+---
+# OpenDJ installation parameters:
+# Enter file name for OpenDJ installation package
+opendj_instpkg: 'OpenDJ-2.6.0.zip'
+# Enter unix user for OpenDJ
+opendj_user: 'opendj'
+# Enter password for the unix user
+opendj_userpwd: 'my_password'
+# Enter unix user's group for OpenDJ
+opendj_group: 'opendj'
+# Enter location where OpenDJ should be installed (automatically creates sub-directory called opendj)
+opendj_instdir: '/opt'
+
+# OpenDJ configuration parameters:
+# Enter base DN for the LDAP instance:
+base_dn: 'o=data'
+# Enter LDAP port
+ldap_port: '1389'
+# Enter LDAPS port
+ldaps_port: '1636'
+# Enter JMX port
+jmx_port: '1689'
+# Generate self-signed certificate, enter true or false
+gen_cert: 'true'
+# Enable StartTLS, enter true or false
+start_tls: 'true'
+# Enter Admin Connector port:
+adm_connport: '4444'
+# Enter password for cn=Directory Manager
+dirman_passwd: 'my_password'
+

@@ -1,0 +1,61 @@
+---
+- name: Install OpenDJ
+  unarchive:
+    copy: yes
+    src: "{{ opendj_instpkg }}"
+    dest: "{{ opendj_instdir }}"
+    owner: "{{ opendj_user }}"
+    group: "{{ opendj_group }}"
+    creates: "{{ opendj_instdir }}/opendj"
+  tags:
+    - opendj
+    - opendjpkg
+
+- name: Copy OpenDJ configuration properties
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ opendj_instdir }}/opendj/{{ item.dest }}"
+    owner: "{{ opendj_user }}"
+    group: "{{ opendj_group }}"
+    mode: 0640
+  with_items:
+    - { src: 'opendj_setup.props.j2', dest: 'opendj_setup.props' }
+    - { src: 'initialize.ldif.j2', dest: 'initialize.ldif' }
+  tags:
+    - opendj 
+    - opendjprops
+
+- name: Configure OpenDJ
+  become: yes
+  become_user: "{{ opendj_user }}"
+  shell: "./setup --cli --propertiesFilePath opendj_setup.props --no-prompt --acceptLicense"
+  args:
+    chdir: "{{ opendj_instdir }}/opendj"
+    executable: /bin/bash
+    creates: "{{ opendj_instdir }}/opendj/config/java.properties"
+  environment:
+    OPENDJ_JAVA_HOME: "/usr/bin"
+  tags:
+    - opendj 
+    - opendjconfig
+
+- name: Create init script
+  shell: "./create-rc-script -f /etc/init.d/opendj -u {{ opendj_user }}"
+  args:
+    chdir: "{{ opendj_instdir }}/opendj/bin"
+    executable: /bin/bash
+    creates: /etc/init.d/opendj
+  tags:
+    - opendj
+    - createinit
+
+- name: Start OpenDJ and enable automatic startup on reboot
+  service:
+    name: opendj 
+    state: started
+    enabled: yes
+  ignore_errors: true
+  tags:
+    - opendj 
+    - startopendj
+
