@@ -4,6 +4,7 @@
     name: "{{ item }}"
     state: present
   with_items:
+    - unzip
     - xorg-x11-server-Xorg
     - xorg-x11-server-utils
     - xorg-x11-utils
